@@ -1,6 +1,11 @@
 export default class Gameboard {
     constructor() {
-        this.grid = Array(10).fill(Array(10).fill(0));
+        this.grid = [];
         this.attacks = [];
+        this.ships = [];
+
+        for (let i = 0; i < 10; i++) {
+            this.grid[i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        }
     }
 }
