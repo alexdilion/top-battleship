@@ -1,6 +1,9 @@
+import shipTypes from "../misc/ship-settings";
+
 export default class Ship {
-    constructor(length) {
-        this.length = length;
+    constructor(type) {
+        this.type = type;
+        this.length = shipTypes[type].length;
         this.hits = 0;
     }
 
