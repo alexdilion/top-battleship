@@ -1,4 +1,4 @@
-import Ship from "../scripts/model/Ship";
+import Ship from "../scripts/model/ship";
 
 test("Creates ship given a valid argument", () => {
     const ship = new Ship(5);
