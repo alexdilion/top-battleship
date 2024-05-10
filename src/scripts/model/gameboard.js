@@ -11,8 +11,29 @@ export default class Gameboard {
             this.grid[i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         }
     }
-    
+
+    isValidLocation(shipData) {
+        const shipLength = shipSettings[shipData.type].length;
+        const { x, y } = shipData.coordinates;
+        let isValid = true;
+
+        if (!shipData.placeVertically) {
+            isValid &&= x + shipLength <= 10;
+            isValid &&= !this.grid[y].slice(x, x + shipLength).includes(1);
+        } else {
+            isValid &&= y + shipLength <= 10;
+            isValid &&= !this.grid
+                .map((row) => row[x])
+                .slice(y, y + shipLength)
+                .includes(1);
+        }
+
+        return isValid;
+    }
+
     place(shipData) {
+        if (!this.isValidLocation(shipData)) return;
+
         const ship = new Ship(shipData.type);
         const coordinateRange = {};
 

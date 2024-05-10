@@ -10,6 +10,7 @@ test("New gameboard is empty", () => {
     });
 
     expect(gameboard.attacks.length).toEqual(0);
+    expect(gameboard.ships.length).toEqual(0);
 });
 
 describe("Ship placement", () => {
@@ -54,5 +55,63 @@ describe("Ship placement", () => {
         const actual = gameboard.grid.map((row) => row[0]);
         expect(actual.slice(0, shipInfo.Battleship.length)).not.toContain(0);
         expect(actual.slice(shipInfo.Battleship.length)).not.toContain(1);
+    });
+
+    test("No placement for out-of-bounds x coordinate", () => {
+        const gameboard = new Gameboard();
+        const actual = gameboard.isValidLocation({
+            type: "Destroyer",
+            coordinates: { x: 10, y: 0 },
+            placeVertically: false,
+        });
+
+        expect(actual).toBe(false);
+    });
+
+    test("No placement for out-of-bounds y coordinate", () => {
+        const gameboard = new Gameboard();
+        const actual = gameboard.isValidLocation({
+            type: "Destroyer",
+            coordinates: { x: 0, y: 10 },
+            placeVertically: true,
+        });
+
+        expect(actual).toBe(false);
+    });
+
+    test("No placement for horizontal ship overlap", () => {
+        const gameboard = new Gameboard();
+        gameboard.place({
+            type: "Carrier",
+            coordinates: { x: 0, y: 0 },
+            placeVertically: false,
+        });
+
+        const actual = gameboard.isValidLocation({
+            type: "Carrier",
+            coordinates: { x: 4, y: 0 },
+            placeVertically: false,
+        });
+
+        expect(actual).toBe(false);
+        expect(gameboard.ships.length).toBe(1);
+    });
+
+    test("No placement for vertical ship overlap", () => {
+        const gameboard = new Gameboard();
+        gameboard.place({
+            type: "Carrier",
+            coordinates: { x: 0, y: 0 },
+            placeVertically: true,
+        });
+
+        const actual = gameboard.isValidLocation({
+            type: "Carrier",
+            coordinates: { x: 0, y: 4 },
+            placeVertically: true,
+        });
+
+        expect(actual).toBe(false);
+        expect(gameboard.ships.length).toBe(1);
     });
 });
