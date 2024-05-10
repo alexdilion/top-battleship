@@ -1,4 +1,5 @@
 import Ship from "./ship";
+import shipSettings from "../misc/ship-settings";
 
 export default class Gameboard {
     constructor() {
@@ -10,13 +11,13 @@ export default class Gameboard {
             this.grid[i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         }
     }
-
-    place(options) {
-        const ship = new Ship(options.type);
+    
+    place(shipData) {
+        const ship = new Ship(shipData.type);
         const coordinateRange = {};
 
-        if (!options.placeVertically) {
-            const { x, y } = options.coordinates;
+        if (!shipData.placeVertically) {
+            const { x, y } = shipData.coordinates;
             coordinateRange.x = [x, x + ship.length - 1];
             coordinateRange.y = y;
 
@@ -24,7 +25,7 @@ export default class Gameboard {
                 this.grid[y][i] = 1;
             }
         } else {
-            const { x, y } = options.coordinates;
+            const { x, y } = shipData.coordinates;
             coordinateRange.x = x;
             coordinateRange.y = [y, y + ship.length];
 
@@ -36,7 +37,7 @@ export default class Gameboard {
         this.ships.push({
             ship,
             coordinateRange,
-            placeVertically: options.placeVertically,
+            placeVertically: shipData.placeVertically,
         });
     }
 }
