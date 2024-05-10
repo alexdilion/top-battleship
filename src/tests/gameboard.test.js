@@ -157,4 +157,26 @@ describe("Gameboard attacks", () => {
 
         expect(gameboard.ships[0].ship.isSunk()).toBe(false);
     });
+
+    test("Game is over when all ships are sunk", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        gameboard.place({
+            type: "Submarine",
+            coordinates: { x: 0, y: 0 },
+            placeVertically: true,
+        });
+
+        gameboard.attack(4, 3);
+        gameboard.attack(5, 3);
+        gameboard.attack(0, 0);
+        gameboard.attack(0, 1);
+        gameboard.attack(0, 2);
+        
+        expect(gameboard.isGameOver()).toBe(true);
+    });
 });

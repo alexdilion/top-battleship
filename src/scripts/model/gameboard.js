@@ -80,4 +80,8 @@ export default class Gameboard {
             return this.grid[y][x].isSunk() ? "sunk" : "hit";
         }
     }
+
+    isGameOver() {
+        return this.ships.every(shipData => shipData.ship.isSunk())
+    }
 }
