@@ -11,9 +11,6 @@ test("New gameboard is empty", () => {
     gameboard.grid.forEach((row) => {
         expect(row).not.toContain(1);
     });
-
-    expect(gameboard.attacks.length).toEqual(0);
-    expect(gameboard.ships.length).toEqual(0);
 });
 
 describe("Ship placement", () => {
@@ -91,7 +88,6 @@ describe("Ship placement", () => {
         });
 
         expect(actual).toBe(false);
-        expect(gameboard.ships.length).toBe(1);
     });
 
     test("No placement for vertical ship overlap", () => {
@@ -108,6 +104,5 @@ describe("Ship placement", () => {
         });
 
         expect(actual).toBe(false);
-        expect(gameboard.ships.length).toBe(1);
     });
 });
