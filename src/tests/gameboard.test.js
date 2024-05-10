@@ -131,4 +131,30 @@ describe("Gameboard attacks", () => {
 
         expect(actual).toMatch("hit");
     });
+
+    test("Ship sinks when all cells are hit", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        gameboard.attack(5, 3);
+        const actual = gameboard.attack(4, 3);
+
+        expect(actual).toMatch("sunk");
+    });
+
+    test("Hits on the same ship cell are not counted", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        gameboard.attack(4, 3);
+        gameboard.attack(4, 3);
+
+        expect(gameboard.ships[0].ship.isSunk()).toBe(false);
+    });
 });

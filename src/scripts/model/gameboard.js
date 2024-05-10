@@ -77,7 +77,7 @@ export default class Gameboard {
             this.attacks[`${x}-${y}`] = "hit";
             this.grid[y][x].hit();
 
-            return "hit";
+            return this.grid[y][x].isSunk() ? "sunk" : "hit";
         }
     }
 }
