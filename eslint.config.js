@@ -6,7 +6,7 @@ export default [
     pluginJs.configs.recommended,
     {
         languageOptions: { globals: globals.browser },
-        ignores: "webpack.config.js",
+        ignores: ["./webpack.config.js"],
     },
     {
         rules: {
