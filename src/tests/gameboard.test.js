@@ -2,9 +2,12 @@ import Gameboard from "../scripts/model/gameboard";
 import Ship from "../scripts/model/ship";
 import shipInfo from "../scripts/misc/ship-settings";
 
-test("New gameboard is empty", () => {
-    const gameboard = new Gameboard();
+let gameboard;
+beforeEach(() => {
+    gameboard = new Gameboard();
+});
 
+test("New gameboard is empty", () => {
     gameboard.grid.forEach((row) => {
         expect(row).not.toContain(1);
     });
@@ -15,7 +18,6 @@ test("New gameboard is empty", () => {
 
 describe("Ship placement", () => {
     test("Place adds ship instance to gameboard's list of ships", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Battleship",
             coordinates: { x: 0, y: 0 },
@@ -32,7 +34,6 @@ describe("Ship placement", () => {
     });
 
     test("Correct horizontal placement with valid location", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Battleship",
             coordinates: { x: 0, y: 0 },
@@ -45,7 +46,6 @@ describe("Ship placement", () => {
     });
 
     test("Correct vertical placement with valid location", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Battleship",
             coordinates: { x: 0, y: 0 },
@@ -58,7 +58,6 @@ describe("Ship placement", () => {
     });
 
     test("No placement for out-of-bounds x coordinate", () => {
-        const gameboard = new Gameboard();
         const actual = gameboard.isValidLocation({
             type: "Destroyer",
             coordinates: { x: 10, y: 0 },
@@ -69,7 +68,6 @@ describe("Ship placement", () => {
     });
 
     test("No placement for out-of-bounds y coordinate", () => {
-        const gameboard = new Gameboard();
         const actual = gameboard.isValidLocation({
             type: "Destroyer",
             coordinates: { x: 0, y: 10 },
@@ -80,7 +78,6 @@ describe("Ship placement", () => {
     });
 
     test("No placement for horizontal ship overlap", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Carrier",
             coordinates: { x: 0, y: 0 },
@@ -98,7 +95,6 @@ describe("Ship placement", () => {
     });
 
     test("No placement for vertical ship overlap", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Carrier",
             coordinates: { x: 0, y: 0 },
