@@ -106,3 +106,29 @@ describe("Ship placement", () => {
         expect(actual).toBe(false);
     });
 });
+
+describe("Gameboard attacks", () => {
+    test("Valid hit on an empty cell", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        const actual = gameboard.attack(4, 4);
+
+        expect(actual).toMatch("miss");
+    });
+
+    test("Hit on a ship", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        const actual = gameboard.attack(4, 3);
+
+        expect(actual).toMatch("hit");
+    });
+});
