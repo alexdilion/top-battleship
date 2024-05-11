@@ -4,8 +4,8 @@ import shipSettings from "../misc/ship-settings";
 export default class Gameboard {
     constructor() {
         this.grid = [];
-        this.attacks = [];
         this.ships = [];
+        this.attacks = {};
 
         for (let i = 0; i < 10; i++) {
             this.grid[i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -19,13 +19,17 @@ export default class Gameboard {
 
         if (!shipData.placeVertically) {
             isValid &&= x + shipLength <= 10;
-            isValid &&= !this.grid[y].slice(x, x + shipLength).includes(1);
+
+            isValid &&= this.grid[y]
+                .slice(x, x + shipLength)
+                .every((cell) => !(cell instanceof Ship));
         } else {
             isValid &&= y + shipLength <= 10;
-            isValid &&= !this.grid
+
+            isValid &&= this.grid
                 .map((row) => row[x])
                 .slice(y, y + shipLength)
-                .includes(1);
+                .every((cell) => !(cell instanceof Ship));
         }
 
         return isValid;
@@ -43,7 +47,7 @@ export default class Gameboard {
             coordinateRange.y = y;
 
             for (let i = x; i < x + ship.length; i++) {
-                this.grid[y][i] = 1;
+                this.grid[y][i] = ship;
             }
         } else {
             const { x, y } = shipData.coordinates;
@@ -51,7 +55,7 @@ export default class Gameboard {
             coordinateRange.y = [y, y + ship.length];
 
             for (let i = y; i < y + ship.length; i++) {
-                this.grid[i][x] = 1;
+                this.grid[i][x] = ship;
             }
         }
 
@@ -60,5 +64,24 @@ export default class Gameboard {
             coordinateRange,
             placeVertically: shipData.placeVertically,
         });
+    }
+
+    attack(x, y) {
+        if (this.attacks[`${x}-${y}`]) return;
+
+        if (this.grid[y][x] === 0) {
+            this.attacks[`${x}-${y}`] = "miss";
+
+            return "miss";
+        } else {
+            this.attacks[`${x}-${y}`] = "hit";
+            this.grid[y][x].hit();
+
+            return this.grid[y][x].isSunk() ? "sunk" : "hit";
+        }
+    }
+
+    isGameOver() {
+        return this.ships.every(shipData => shipData.ship.isSunk())
     }
 }

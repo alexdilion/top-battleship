@@ -2,20 +2,19 @@ import Gameboard from "../scripts/model/gameboard";
 import Ship from "../scripts/model/ship";
 import shipInfo from "../scripts/misc/ship-settings";
 
-test("New gameboard is empty", () => {
-    const gameboard = new Gameboard();
+let gameboard;
+beforeEach(() => {
+    gameboard = new Gameboard();
+});
 
+test("New gameboard is empty", () => {
     gameboard.grid.forEach((row) => {
         expect(row).not.toContain(1);
     });
-
-    expect(gameboard.attacks.length).toEqual(0);
-    expect(gameboard.ships.length).toEqual(0);
 });
 
 describe("Ship placement", () => {
     test("Place adds ship instance to gameboard's list of ships", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Battleship",
             coordinates: { x: 0, y: 0 },
@@ -32,7 +31,6 @@ describe("Ship placement", () => {
     });
 
     test("Correct horizontal placement with valid location", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Battleship",
             coordinates: { x: 0, y: 0 },
@@ -45,7 +43,6 @@ describe("Ship placement", () => {
     });
 
     test("Correct vertical placement with valid location", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Battleship",
             coordinates: { x: 0, y: 0 },
@@ -58,7 +55,6 @@ describe("Ship placement", () => {
     });
 
     test("No placement for out-of-bounds x coordinate", () => {
-        const gameboard = new Gameboard();
         const actual = gameboard.isValidLocation({
             type: "Destroyer",
             coordinates: { x: 10, y: 0 },
@@ -69,7 +65,6 @@ describe("Ship placement", () => {
     });
 
     test("No placement for out-of-bounds y coordinate", () => {
-        const gameboard = new Gameboard();
         const actual = gameboard.isValidLocation({
             type: "Destroyer",
             coordinates: { x: 0, y: 10 },
@@ -80,7 +75,6 @@ describe("Ship placement", () => {
     });
 
     test("No placement for horizontal ship overlap", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Carrier",
             coordinates: { x: 0, y: 0 },
@@ -94,11 +88,9 @@ describe("Ship placement", () => {
         });
 
         expect(actual).toBe(false);
-        expect(gameboard.ships.length).toBe(1);
     });
 
     test("No placement for vertical ship overlap", () => {
-        const gameboard = new Gameboard();
         gameboard.place({
             type: "Carrier",
             coordinates: { x: 0, y: 0 },
@@ -112,6 +104,79 @@ describe("Ship placement", () => {
         });
 
         expect(actual).toBe(false);
-        expect(gameboard.ships.length).toBe(1);
+    });
+});
+
+describe("Gameboard attacks", () => {
+    test("Valid hit on an empty cell", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        const actual = gameboard.attack(4, 4);
+
+        expect(actual).toMatch("miss");
+    });
+
+    test("Hit on a ship", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        const actual = gameboard.attack(4, 3);
+
+        expect(actual).toMatch("hit");
+    });
+
+    test("Ship sinks when all cells are hit", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        gameboard.attack(5, 3);
+        const actual = gameboard.attack(4, 3);
+
+        expect(actual).toMatch("sunk");
+    });
+
+    test("Hits on the same ship cell are not counted", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        gameboard.attack(4, 3);
+        gameboard.attack(4, 3);
+
+        expect(gameboard.ships[0].ship.isSunk()).toBe(false);
+    });
+
+    test("Game is over when all ships are sunk", () => {
+        gameboard.place({
+            type: "Destroyer",
+            coordinates: { x: 4, y: 3 },
+            placeVertically: false,
+        });
+
+        gameboard.place({
+            type: "Submarine",
+            coordinates: { x: 0, y: 0 },
+            placeVertically: true,
+        });
+
+        gameboard.attack(4, 3);
+        gameboard.attack(5, 3);
+        gameboard.attack(0, 0);
+        gameboard.attack(0, 1);
+        gameboard.attack(0, 2);
+        
+        expect(gameboard.isGameOver()).toBe(true);
     });
 });
