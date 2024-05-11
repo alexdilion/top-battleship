@@ -8,7 +8,7 @@ export default class Gameboard {
         this.attacks = {};
 
         for (let i = 0; i < 10; i++) {
-            this.grid[i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            this.grid[i] = Array(10).fill(0);
         }
     }
 
@@ -82,6 +82,6 @@ export default class Gameboard {
     }
 
     isGameOver() {
-        return this.ships.every(shipData => shipData.ship.isSunk())
+        return this.ships.every((shipData) => shipData.ship.isSunk());
     }
 }
