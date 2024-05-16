@@ -1,6 +1,6 @@
 import Gameboard from "../scripts/model/gameboard";
 import Ship from "../scripts/model/ship";
-import shipInfo from "../scripts/misc/ship-settings";
+import shipInfo from "../scripts/misc/shipSettings";
 
 let gameboard;
 beforeEach(() => {

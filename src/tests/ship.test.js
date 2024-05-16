@@ -1,5 +1,5 @@
 import Ship from "../scripts/model/ship";
-import shipTypes from "../scripts/misc/ship-settings";
+import shipTypes from "../scripts/misc/shipSettings";
 
 test("Creates ship given a valid argument", () => {
     const ship = new Ship("Carrier");

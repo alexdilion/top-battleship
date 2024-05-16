@@ -1,5 +1,5 @@
 import Ship from "./ship";
-import shipSettings from "../misc/ship-settings";
+import shipSettings from "../misc/shipSettings";
 
 export default class Gameboard {
     constructor() {

@@ -1,4 +1,4 @@
-import shipTypes from "../misc/ship-settings";
+import shipTypes from "../misc/shipSettings";
 
 export default class Ship {
     constructor(type) {
