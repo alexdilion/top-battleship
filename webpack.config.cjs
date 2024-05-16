@@ -6,10 +6,10 @@ module.exports = {
     entry: "./src/index.js",
     devtool: "inline-source-map",
     devServer: {
-        static: "./dist",
+        static: "./public",
     },
     output: {
         filename: "bundle.js",
-        path: path.resolve(__dirname, "dist"),
+        path: path.resolve(__dirname, "public"),
     },
 };
